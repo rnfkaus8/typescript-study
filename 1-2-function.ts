@@ -1,5 +1,6 @@
 {
     // javascript
+ /*
     function jsAdd(num1, num2){
         return num1 + num2;
     }
@@ -27,5 +28,32 @@
             resolve(100);
         })
     }
+*/
+    // javascript -> typescript
+    // optional parameter
+    function printName(firstName: String, lastName?: string) {
+        console.log(firstName);
+        console.log(lastName);
+    }
+
+    printName('steve', 'jobs');
+    printName('taehyun')
+    printName('Anna', undefined);
+
+    // Default parameter
+    function printMessage(message: string = 'default message') {
+        console.log(message);
+    }
+
+    printMessage();
+
+    // Rest parameter
+    function addNumbers(...numbers: number[]): number {
+        return numbers.reduce((a, b) => a + b);
+    }
+    console.log(addNumbers(1, 2));
+    console.log(addNumbers(1, 2, 3, 4));
+    console.log(addNumbers(1, 2, 3, 4, 5, 6));
+
 }
 
