@@ -30,4 +30,12 @@
         }
     }
 
+    function printLoginState(state: LoginState) {
+        if ('response' in state) {
+            console.log(`welcome!! ${state.response.body}`);
+            return;
+        }
+        console.log(`sry... ${state.reason}`);
+    }
+
 }
