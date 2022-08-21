@@ -24,5 +24,5 @@
     }
   }
   const coffeeMaker = new CoffeeMaker(32);
-  console.log(coffeeMaker);
+  console.log(coffeeMaker.makeCoffee(3));
 }
