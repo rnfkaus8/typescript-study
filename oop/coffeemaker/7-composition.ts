@@ -59,7 +59,15 @@
     }
   }
 
-  class CheapMilkSteamer {
+  interface MilkFrother {
+    makeMilk(cup: CoffeeCup): CoffeeCup;
+  }
+
+  interface SugarProvider {
+    addSugar(cup: CoffeeCup): CoffeeCup;
+  }
+
+  class CheapMilkSteamer implements MilkFrother {
     private steamMilk(): void {
       console.log("Steaming some milk....");
     }
@@ -72,7 +80,47 @@
     }
   }
 
-  class AutomaticSugarMixer {
+  class FancyMilkSteamer implements MilkFrother {
+    private steamMilk(): void {
+      console.log("Fancy Steaming some milk....");
+    }
+    makeMilk(cup: CoffeeCup): CoffeeCup {
+      this.steamMilk();
+      return {
+        ...cup,
+        hasMilk: true,
+      };
+    }
+  }
+
+  class ColdMilkSteamer implements MilkFrother {
+    private steamMilk(): void {
+      console.log("Cold Steaming some milk....");
+    }
+    makeMilk(cup: CoffeeCup): CoffeeCup {
+      this.steamMilk();
+      return {
+        ...cup,
+        hasMilk: true,
+      };
+    }
+  }
+
+  class CandySugarMixer implements SugarProvider {
+    private getSugar() {
+      console.log("getting some sugar from candy");
+    }
+
+    addSugar(cup: CoffeeCup): CoffeeCup {
+      const sugar = this.getSugar();
+      return {
+        ...cup,
+        hasSugar: true,
+      };
+    }
+  }
+
+  class SugarMixer implements SugarProvider {
     private getSugar() {
       console.log("getting some sugar from jar");
     }
@@ -90,7 +138,7 @@
     constructor(
       beans: number,
       public readonly serialNumber: string,
-      private milkFother: CheapMilkSteamer
+      private milkFother: MilkFrother
     ) {
       super(beans);
     }
@@ -101,7 +149,7 @@
   }
 
   class SweetCoffeeMaker extends CoffeeMachine {
-    constructor(private beans: number, private sugar: AutomaticSugarMixer) {
+    constructor(private beans: number, private sugar: SugarProvider) {
       super(beans);
     }
     makeCoffee(shots: number): CoffeeCup {
@@ -113,8 +161,8 @@
   class SweetCaffeLatteMachine extends CoffeeMachine {
     constructor(
       private beans: number,
-      private milk: CheapMilkSteamer,
-      private sugar: AutomaticSugarMixer
+      private milk: MilkFrother,
+      private sugar: SugarProvider
     ) {
       super(beans);
     }
@@ -124,4 +172,22 @@
       return this.milk.makeMilk(this.sugar.addSugar(coffee));
     }
   }
+
+  const cheapMilkMaker = new CheapMilkSteamer();
+  const fancyMilkMaker = new FancyMilkSteamer();
+  const coldMilkMaker = new ColdMilkSteamer();
+
+  const candySugar = new CandySugarMixer();
+  const sugar = new SugarMixer();
+
+  const sweetCandyMachine = new SweetCoffeeMaker(12, candySugar);
+  const sweetMachine = new SweetCoffeeMaker(12, sugar);
+
+  const latteMachine = new CaffeLatteMachine(12, "ss", cheapMilkMaker);
+  const coldLatteMachine = new CaffeLatteMachine(12, "ss", coldMilkMaker);
+  const sweetLatteMachine = new SweetCaffeLatteMachine(
+    12,
+    cheapMilkMaker,
+    candySugar
+  );
 }
